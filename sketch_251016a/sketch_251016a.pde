@@ -93,9 +93,20 @@ void draw() {
     }
   }
 
+  float frontWallX = -1;
+  float closestDist = width * 2;
+
+  for (int i = 0; i < walls.length; i++) {
+      float d = walls[i].wallx - b.boxx;
+      if (d > 0 && d < closestDist) {
+          closestDist = d;
+          frontWallX = walls[i].wallx;
+      }
+  }
+
   textSize(20);
   fill(255);
-  text("x: "+(int)b.boxx+" y: "+(int)b.boxy, 10, 15);
+  text("Wall x: " + (int)frontWallX, 10, 15);
 }
 
 void resetGame() {
