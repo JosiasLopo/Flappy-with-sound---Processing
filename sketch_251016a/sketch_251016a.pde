@@ -1,6 +1,12 @@
+import processing.sound.*;
+
 String backgroundText;
 float textX = 0;
 float textWidth;
+
+AudioIn in;
+Amplitude amp;
+int clapCooldown;
 
 box b = new box();
 wall[] walls = new wall[3];
@@ -16,6 +22,13 @@ void setup() {
   String[] lines = loadStrings("../memoriasdaterra_1.txt");
   backgroundText = join(lines, "");
   startTime = 3600;
+  
+  // Audio setup
+  in = new AudioIn(this, 0);
+  amp = new Amplitude(this);
+  in.start();
+  amp.input(in);
+  
   resetGame();
 }
 
@@ -36,11 +49,27 @@ void draw() {
     textX = 0;
   }
 
+  float volume = amp.analyze();
+  float threshold = 0.1; // This may need tuning
+
+  if (clapCooldown > 0) {
+    clapCooldown--;
+  }
+
+  if (volume > threshold && clapCooldown == 0) {
+    if (screen == 0) { // If in Ready state, start the game
+      screen = 1;
+      frameCount = 0; // Reset timer
+    }
+    b.up(); // Jump regardless of the state
+    clapCooldown = 30; // Apply cooldown
+  }
+
   if (screen == 0) { // Ready state
     b.createBox();
     fill(255);
     textSize(60);
-    // text("Tap to start", width/2.8, height/2);
+   // text("Clap or Tap to start", width/3.5, height/2);
   } else if (screen == 1) { // Playing state
     int timer = (startTime - frameCount) / 60;
     textSize(50);
@@ -66,7 +95,7 @@ void draw() {
 
   textSize(20);
   fill(255);
-  text("x: "+mouseX+" y: "+mouseY, 10, 15);
+  text("x: "+(int)b.boxx+" y: "+(int)b.boxy, 10, 15);
 }
 
 void resetGame() {
@@ -164,9 +193,7 @@ void keyPressed() {
       screen = 1;
       frameCount = 0; // Reset timer
     }
-    if (screen == 1) {
-      b.up();
-    }
+    b.up();
   }
 }
 
@@ -176,8 +203,6 @@ void mousePressed() {
       screen = 1;
       frameCount = 0; // Reset timer
     }
-    if (screen == 1) {
-      b.up();
-    }
+    b.up();
   }
 }
