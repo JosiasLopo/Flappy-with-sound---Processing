@@ -40,7 +40,7 @@ void draw() {
     b.createBox();
     fill(255);
     textSize(60);
-    text("Tap to start", width/2.8, height/2);
+    // text("Tap to start", width/2.8, height/2);
   } else if (screen == 1) { // Playing state
     int timer = (startTime - frameCount) / 60;
     textSize(50);
