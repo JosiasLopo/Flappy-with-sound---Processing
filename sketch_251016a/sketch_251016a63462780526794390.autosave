@@ -23,16 +23,16 @@ void draw() {
   background(0);
   
   // Animate and draw the background text
-  textSize(50);
-  float scrollingTextWidth = width * 2; // Make it wrap
-  fill(255, 50);
+  textSize(24);
+  textWidth = textWidth(backgroundText);
+  fill(255);
   
-  text(backgroundText, textX, 0, scrollingTextWidth, height);
-  text(backgroundText, textX + scrollingTextWidth, 0, scrollingTextWidth, height);
+  text(backgroundText, textX, 20, textWidth, height -20);
+  text(backgroundText, textX + textWidth, 20, textWidth, height - 20);
   
   textX -= 2; // Scrolling speed
   
-  if (textX < -scrollingTextWidth) {
+  if (textX < -textWidth) {
     textX = 0;
   }
 
@@ -79,7 +79,6 @@ void resetGame() {
   }
   frameCount = 0;
   screen = 0;
-  textX = random(0, -width * 2);
 }
 
 class box {
